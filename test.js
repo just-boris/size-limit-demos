@@ -4,8 +4,15 @@ import webpackPlugin from "@size-limit/webpack";
 import esbuildPlugin from "@size-limit/esbuild";
 import webpackCss from "@size-limit/webpack-css";
 
-const webpackSize = await sizeLimit([filePlugin, webpackPlugin, webpackCss], ["./src/index.js"]);
-const esbuildSize = await sizeLimit([filePlugin, esbuildPlugin], ["./src/index.js"]);
+async function testSizes(entry) {
+  console.log("testing", entry);
+  const webpackSize = await sizeLimit([filePlugin, webpackPlugin, webpackCss], [entry]);
+  const esbuildSize = await sizeLimit([filePlugin, esbuildPlugin], [entry]);
 
-console.log("Size according to webpack", webpackSize);
-console.log("Size according to esbuild", esbuildSize);
+  console.log("Size according to webpack", webpackSize);
+  console.log("Size according to esbuild", esbuildSize);
+}
+
+await testSizes("./src/index.js");
+await testSizes("./src/pure.js");
+await testSizes("./src/styles.css");
